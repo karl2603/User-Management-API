@@ -16,6 +16,11 @@ public class UserController {
     @Autowired
     UserService service;
 
+    @GetMapping("users")
+    public List<UserResponseDTO> getAllUsers(){
+        return service.getAllUsers();
+    }
+
     @PostMapping("users/create")
     public void createUser(@RequestBody UserRequestDTO userRequest){
         service.createUser(userRequest);
