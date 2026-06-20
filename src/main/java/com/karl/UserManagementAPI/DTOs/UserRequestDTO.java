@@ -1,4 +1,5 @@
 package com.karl.UserManagementAPI.DTOs;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -11,6 +12,7 @@ import lombok.*;
 public class UserRequestDTO {
     @NotBlank(message = "Name is required!")
     private String name;
+    @Column(unique = true)
     @NotBlank(message = "Email is required!")
     @Email(message = "Enter a valid email!")
     private String email;

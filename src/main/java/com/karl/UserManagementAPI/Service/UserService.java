@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -51,4 +52,29 @@ public class UserService {
         newUser.setAccountStatus("Active");
         repository.save(newUser);
     }
-}
+
+    public void editUser(UserRequestDTO request) {
+        User user = repository.findByName(request.getName());
+        if (user == null) {
+            throw new NoSuchElementException();
+        } else {
+            user.setName(request.getName());
+            user.setEmail(request.getEmail());
+            user.setPassword(request.getPassword());
+            user.setPhoneNo(request.getPhoneNo());
+            user.setCity(request.getCity());
+            user.setRole("User");
+            user.setAccountStatus(("Active"));
+        }
+        repository.save(user);
+    }
+
+    public void deleteUser(int id){
+        User user = repository.findById(id).orElse(null);
+        if(user == null){
+            throw new NoSuchElementException();
+        }
+        repository.delete(user);
+    }
+    }
+

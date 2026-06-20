@@ -35,9 +35,21 @@ public class UserController {
         }
     }
 
-    @PostMapping("users/create")
+    @PostMapping("user/create")
     public ResponseEntity<String> createUser(@Valid @RequestBody UserRequestDTO userRequest){
         service.createUser(userRequest);
         return new ResponseEntity<>("User Added", HttpStatus.CREATED);
+    }
+
+    @PutMapping("user/edit")
+    public ResponseEntity<String> editUser(@Valid @RequestBody UserRequestDTO request){
+        service.editUser(request);
+        return new ResponseEntity<>("User Edited", HttpStatus.OK);
+    }
+
+    @DeleteMapping("user/delete/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable("userId") int id){
+        service.deleteUser(id); 
+        return new ResponseEntity<>("User Deleted", HttpStatus.OK);
     }
 }
