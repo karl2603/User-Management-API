@@ -2,7 +2,6 @@ package com.karl.UserManagementAPI.Controller;
 
 import com.karl.UserManagementAPI.DTOs.UserRequestDTO;
 import com.karl.UserManagementAPI.DTOs.UserResponseDTO;
-import com.karl.UserManagementAPI.Model.User;
 import com.karl.UserManagementAPI.Service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/")
@@ -28,7 +28,7 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("userId") int userId) {
         UserResponseDTO response = service.getUser(userId);
         if(response == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NoSuchElementException();
         }
         else{
             return new ResponseEntity<>(response, HttpStatus.OK);
