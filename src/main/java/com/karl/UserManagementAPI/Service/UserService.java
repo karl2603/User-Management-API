@@ -31,6 +31,10 @@ public class UserService {
         return response;
     }
 
+    public User getUser(int userId){
+        return repository.findById(userId).orElse(null);
+    }
+
     public void createUser(UserRequestDTO userRequest){
         User newUser = new User();
         newUser.setName(userRequest.getName());
