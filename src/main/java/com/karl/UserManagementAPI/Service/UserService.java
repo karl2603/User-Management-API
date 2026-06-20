@@ -31,8 +31,13 @@ public class UserService {
         return response;
     }
 
-    public User getUser(int userId){
-        return repository.findById(userId).orElse(null);
+    public UserResponseDTO getUser(int userId){
+        User user = repository.findById(userId).orElse(null);
+        if(user == null){
+           return null;
+        }
+        UserResponseDTO response = new UserResponseDTO(user.getName(), user.getEmail(), user.getPhoneNo(), user.getCity(), user.getAccountStatus());
+        return response;
     }
 
     public void createUser(UserRequestDTO userRequest){

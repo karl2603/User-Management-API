@@ -25,13 +25,13 @@ public class UserController {
     }
 
     @GetMapping("user/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable("userId") int userId){
-        User user = service.getUser(userId);
-        if(user == null){
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("userId") int userId) {
+        UserResponseDTO response = service.getUser(userId);
+        if(response == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else{
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
 
