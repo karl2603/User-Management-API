@@ -2,6 +2,7 @@ package com.karl.UserManagementAPI.Controller;
 
 import com.karl.UserManagementAPI.DTOs.UserRequestDTO;
 import com.karl.UserManagementAPI.DTOs.UserResponseDTO;
+import com.karl.UserManagementAPI.Model.User;
 import com.karl.UserManagementAPI.Service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class UserController {
         return service.getAllUsers();
     }
 
+    @GetMapping("allUsers")
+    public List<User> fetchAllRecords(){
+        return service.fetchAllRecords();
+    }
+
     @GetMapping("user/{userId}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("userId") int userId) {
         UserResponseDTO response = service.getUser(userId);
@@ -39,6 +45,12 @@ public class UserController {
     public ResponseEntity<String> createUser(@Valid @RequestBody UserRequestDTO userRequest){
         service.createUser(userRequest);
         return new ResponseEntity<>("User Added", HttpStatus.CREATED);
+    }
+
+    @PostMapping("admin/create")
+    public ResponseEntity<UserRequestDTO> createAdmin(@Valid @RequestBody UserRequestDTO userRequest){
+        service.createAdmin(userRequest);
+        return new ResponseEntity<>(userRequest, HttpStatus.CREATED);
     }
 
     @PutMapping("user/edit")

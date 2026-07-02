@@ -41,6 +41,10 @@ public class UserService {
         return response;
     }
 
+    public List<User> fetchAllRecords(){
+        return repository.findAll();
+    }
+
     public void createUser(UserRequestDTO userRequest){
         User newUser = new User();
         newUser.setName(userRequest.getName());
@@ -51,6 +55,18 @@ public class UserService {
         newUser.setRole("User");
         newUser.setAccountStatus("Active");
         repository.save(newUser);
+    }
+
+    public void createAdmin(UserRequestDTO userRequest){
+        User user = new User();
+        user.setName(userRequest.getName());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(userRequest.getPassword());
+        user.setCity(userRequest.getCity());
+        user.setPhoneNo(userRequest.getPhoneNo());
+        user.setRole("admin");
+        user.setAccountStatus(("active"));
+        repository.save(user);
     }
 
     public void editUser(UserRequestDTO request) {
