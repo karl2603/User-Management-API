@@ -1,0 +1,57 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import LoadingPage from './components/LoadingPage';
+
+interface userResponse{
+  name: string;
+  email: string;
+  phoneNo: string;
+  city: string;
+  accountStatus: string;
+}
+
+function App() {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [users, setUsers] = useState<userResponse[] | null>(null);
+  const url:string = "http://localhost:8080/";
+
+  async function fetchData(){
+    try {
+      const response = await axios.get(url+"users");
+      const data = response.data;
+      setUsers(data);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error Fetching Data");
+    }
+  }
+
+  useEffect(()=>{
+    fetchData();
+  },[])
+  
+  //loading page
+  if(!loading){
+    return(
+      <LoadingPage />
+    )
+  }
+
+  return (
+    <>
+    <div className='container'>
+      {users?.map((user) => (
+        <div className='userContainer'>
+          <h2 className='userName'>Username : {user.name}</h2>
+          <p className='userEmail'>Email Address : {user.email}</p>
+          <p className='userPhoneNo'>Phone Number : {user.phoneNo}</p>
+          <p className='userCity'>City : {user.city}</p>
+          <p className='userAccStatus'>Account Status : {user.accountStatus}</p>
+        </div>
+      ))}
+    </div>
+    </>
+  )
+}
+
+export default App
