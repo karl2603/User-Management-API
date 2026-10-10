@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import LoadingPage from './components/LoadingPage';
 import Error404 from './components/Error404';
+import "./App.css";
 
 interface userResponse{
   name: string;
@@ -25,6 +26,7 @@ function App() {
       setLoading(false);
     } catch (error) {
       console.log("Error Fetching Data");
+      setLoading(false);
       setApiError(true);
     }
   }

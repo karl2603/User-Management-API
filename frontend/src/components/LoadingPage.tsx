@@ -1,3 +1,5 @@
+import "../App.css";
+
 function LoadingPage() {
   return (
     <div className="loading-page" role="status" aria-live="polite">

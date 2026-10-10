@@ -1,3 +1,4 @@
+import "../App.css";
 
 function Error404() {
    return (

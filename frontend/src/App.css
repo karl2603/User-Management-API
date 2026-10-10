@@ -1,0 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..600&display=swap');
+
+/* ==========================================================================
+   Tokens
+   ========================================================================== */
+:root {
+  --paper: #ecefed;
+  --surface: #fafbfa;
+  --ink: #17251f;
+  --muted: #58675f;
+  --line: #d2dad5;
+  --rule: rgba(23, 37, 31, 0.045);
+
+  --accent: #0d6b5b;
+  --accent-warm: #d69a2d;
+  --danger: #b93a2f;
+
+  --st-active: #1e8a57;
+  --st-pending: #b7791f;
+  --st-inactive: #6b7a73;
+  --st-blocked: #b93a2f;
+
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0f1714;
+    --surface: #16211d;
+    --ink: #e6eee9;
+    --muted: #9aaaa2;
+    --line: #2a3832;
+    --rule: rgba(230, 238, 233, 0.04);
+
+    --accent: #3fc5a8;
+    --accent-warm: #e8b04a;
+    --danger: #f2776b;
+
+    --st-active: #46c08a;
+    --st-pending: #e3a64b;
+    --st-inactive: #8a9a92;
+    --st-blocked: #f2776b;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: var(--paper);
+  /* faint ledger ruling: the app is a directory of records */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 31px,
+    var(--rule) 31px 32px
+  );
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ==========================================================================
+   Loading + error screen (shared shell)
+   ========================================================================== */
+.loading-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  text-align: center;
+}
+
+/* Only show the loading state if the wait is noticeable (no flash on fast loads) */
+.loading-page[role='status'] .loading-content {
+  opacity: 0;
+  animation: fade-in 0.3s ease-out 0.2s forwards;
+}
+
+.loading-logo-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.loading-logo-text::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--accent);
+  box-shadow: 5px 5px 0 -2px var(--accent-warm);
+  margin-right: 4px;
+}
+
+/* ---------- Spinner: the one memorable element ---------- */
+.loading-spinner {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 3px var(--line);
+}
+
+.loading-spinner-ring,
+.loading-spinner-ring::before,
+.loading-spinner-ring::after {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* outer arc */
+.loading-spinner-ring {
+  inset: 0;
+  border: 3px solid transparent;
+  border-top-color: var(--accent);
+  border-right-color: var(--accent);
+  animation: spin 1.2s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+}
+
+/* inner arc, counter-rotating */
+.loading-spinner-ring::before {
+  content: '';
+  inset: 10px;
+  border: 3px solid transparent;
+  border-bottom-color: var(--accent-warm);
+  border-left-color: var(--accent-warm);
+  animation: spin 1.8s linear infinite reverse;
+}
+
+/* core */
+.loading-spinner-ring::after {
+  content: '';
+  inset: 28px;
+  background: var(--accent);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(0.7); opacity: 0.55; }
+  50%      { transform: scale(1);   opacity: 1; }
+}
+
+.loading-text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Error state (same shell, role="alert") ---------- */
+.loading-error-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.loading-error-title::before {
+  content: '!';
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 22px;
+  border: 2px solid var(--danger);
+  border-radius: 50%;
+  color: var(--danger);
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.loading-error-message {
+  margin: 12px 0 0;
+  max-width: 36ch;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ==========================================================================
+   User directory
+   ========================================================================== */
+.container {
+  width: min(1120px, 100% - 2 * clamp(16px, 4vw, 48px));
+  margin-inline: auto;
+  padding-block: clamp(32px, 6vw, 72px);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  grid-auto-rows: 1fr; /* every card is as tall as the tallest one */
+  gap: 16px;
+  animation: fade-in 0.4s ease-out both;
+}
+
+/* Default edge/pill colour. Optional: add data-status to the card in JSX
+   to get per-status colours from the rules below. */
+.userContainer {
+  --status: var(--accent);
+}
+.userContainer[data-status='inactive'],
+.userContainer[data-status='disabled'] {
+  --status: var(--st-inactive);
+}
+.userContainer[data-status='active'] {
+  --status: var(--st-active);
+}
+.userContainer[data-status='pending'] {
+  --status: var(--st-pending);
+}
+.userContainer[data-status='suspended'],
+.userContainer[data-status='blocked'],
+.userContainer[data-status='banned'],
+.userContainer[data-status='locked'] {
+  --status: var(--st-blocked);
+}
+
+.userContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 20px 22px 20px 27px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* left edge encodes account status */
+.userContainer::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: var(--status);
+}
+
+.userName {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.userEmail,
+.userPhoneNo,
+.userCity {
+  margin: 0;
+  font-size: 0.925rem;
+  color: var(--muted);
+}
+
+/* one line each, long values end with an ellipsis so card height never changes */
+.userName,
+.userEmail,
+.userPhoneNo,
+.userCity {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userCity {
+  margin-bottom: 16px;
+}
+
+.userPhoneNo {
+  font-variant-numeric: tabular-nums;
+}
+
+.userAccStatus {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: auto 0 0; /* pins the pill to the bottom of the card */
+  padding: 4px 12px 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--status) 65%, var(--ink));
+  background: color-mix(in srgb, var(--status) 12%, transparent);
+}
+
+.userAccStatus::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status);
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner-ring,
+  .loading-spinner-ring::before,
+  .loading-spinner-ring::after {
+    animation: none;
+  }
+
+  .loading-page[role='status'] .loading-content {
+    opacity: 1;
+    animation: none;
+  }
+
+  .container {
+    animation: none;
+  }
+}
