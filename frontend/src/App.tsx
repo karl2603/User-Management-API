@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import LoadingPage from './components/LoadingPage';
+import Error404 from './components/Error404';
 
 interface userResponse{
   name: string;
@@ -13,6 +14,7 @@ interface userResponse{
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [users, setUsers] = useState<userResponse[] | null>(null);
+  const [apiError, setApiError] = useState<boolean>(false);
   const url:string = "http://localhost:8080/";
 
   async function fetchData(){
@@ -23,6 +25,7 @@ function App() {
       setLoading(false);
     } catch (error) {
       console.log("Error Fetching Data");
+      setApiError(true);
     }
   }
 
@@ -31,9 +34,15 @@ function App() {
   },[])
   
   //loading page
-  if(!loading){
+  if(loading){
     return(
-      <LoadingPage />
+      <LoadingPage/>
+    )
+  }
+
+  if(apiError){
+    return(
+      <Error404 />
     )
   }
 

@@ -1,5 +1,3 @@
-import React from 'react'
-
 function LoadingPage() {
   return (
     <div className="loading-page" role="status" aria-live="polite">
@@ -13,13 +11,10 @@ function LoadingPage() {
         </div>
 
         <p className="loading-text">Loading...</p>
-
-        <div className="loading-progress">
-          <div className="loading-progress-bar"></div>
-        </div>
       </div>
     </div>
-  )
+  );
 }
+
 
 export default LoadingPage;
